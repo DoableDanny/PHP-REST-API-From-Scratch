@@ -84,4 +84,33 @@
       return false;
     }
 
+    // Update category
+    public function update() {
+      $query = 'UPDATE ' . $this->table .'
+      SET
+        name = :name
+      WHERE 
+        id = :id';
+
+      // Prepare statement
+      $stmt = $this->conn->prepare($query);
+
+      // Clean data
+      $this->id = htmlspecialchars(strip_tags($this->id));
+      $this->name = htmlspecialchars(strip_tags($this->name));
+
+      // Bind params
+      $stmt->bindParam(':id', $this->id);
+      $stmt->bindParam(':name', $this->name);
+
+      // Execute statement
+      if($stmt->execute()) {
+        return true;
+      }
+
+      printf("Error: %s. \n" . $stmt->error);
+
+      return false;
+    }
+
   }
