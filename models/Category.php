@@ -60,4 +60,28 @@
       $this->name = $row['name'];
     }
 
+    // Create new category
+    public function create() {
+      $query = 'INSERT INTO ' . $this->table . '
+      SET 
+        name = :name';
+
+      // Prepare statement
+      $stmt = $this->conn->prepare($query);
+
+      // Clean data
+      $this->name = htmlspecialchars(strip_tags($this->name));
+
+      // Bind params
+      $stmt->bindParam(':name', $this->name);
+
+      if($stmt->execute()) {
+        return true;
+      }
+
+      printf("Error: %s. \n" . $stmt->error());
+
+      return false;
+    }
+
   }
