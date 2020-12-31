@@ -84,7 +84,7 @@
       return false;
     }
 
-    // Update category
+    // Update a category
     public function update() {
       $query = 'UPDATE ' . $this->table .'
       SET
@@ -102,6 +102,31 @@
       // Bind params
       $stmt->bindParam(':id', $this->id);
       $stmt->bindParam(':name', $this->name);
+
+      // Execute statement
+      if($stmt->execute()) {
+        return true;
+      }
+
+      printf("Error: %s. \n" . $stmt->error);
+
+      return false;
+    }
+
+    // Delete a category
+    public function delete() {
+      $query = 'DELETE FROM ' . $this->table . '
+      WHERE
+        id = ?';
+      
+      // Prepare statement
+      $stmt = $this->conn->prepare($query);
+
+      // Clean data
+      $this->id = htmlspecialchars(strip_tags($this->id));
+
+      // Bind param
+      $stmt->bindParam(1, $this->id);
 
       // Execute statement
       if($stmt->execute()) {
